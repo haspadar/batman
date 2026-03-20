@@ -18,7 +18,10 @@
       "Bash(git remote:*)",
       "Bash(git branch:*)",
       "Bash(git add:*)",
-      "Bash(git:*)"
+      "Bash(git:*)",
+      "Bash(sshpass:*)",
+      "Bash(ssh:*)",
+      "Bash(ssh-keygen:*)"
     ]
   }
 }
