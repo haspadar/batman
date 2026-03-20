@@ -1,6 +1,6 @@
 # Скил `batman-sync-hosts`
 
-Синхронизация серверов из Bitwarden в `/etc/hosts`.
+Синхронизация серверов из Bitwarden в `/etc/hosts` и `~/.ssh/config`.
 
 ## Шаг 1 — Получить список серверов из Bitwarden
 
@@ -46,13 +46,47 @@ sudo tee /etc/hosts <<'EOF'
 EOF
 ```
 
-## Шаг 4 — Итог
+## Шаг 4 — Обновить ~/.ssh/config
 
-Выведи что изменилось:
+Прочитай `/Users/haspadar/Projects/batman/.ssh_user`. Формат строки:
 ```
-✓ добавлен:   new-server      1.2.3.4
-~ без изменений: autode-master   116.203.102.213
-✗ удалён:     old-server      5.6.7.8
+username password /path/to/key.pub
+```
 
-Итого: 18 записей в /etc/hosts
+Из этой строки:
+- `username` → User в SSH-блоке
+- `/path/to/key.pub` → убери `.pub` → IdentityFile
+
+Сформируй batman-блок для `~/.ssh/config`:
+```
+# batman begin
+Host apola-master autode-master autode-slave ...
+    User km
+    IdentityFile ~/.ssh/id_rsa_km
+    IdentitiesOnly yes
+    Port 22
+# batman end
+```
+
+Хосты в строке `Host` — все hostname из Bitwarden, отсортированные по алфавиту, через пробел.
+
+Прочитай `~/.ssh/config`. Найди блок между `# batman begin` и `# batman end`:
+- Если блок есть — замени целиком.
+- Если нет — добавь в конец файла (перед блоками `Host github.com` и другими не-серверными хостами не нужно — просто в конец).
+
+Запись напрямую в файл (sudo не нужен для `~/.ssh/config`).
+
+## Шаг 5 — Итог
+
+Выведи изменения отдельно для каждого файла:
+
+```
+/etc/hosts:
++ добавлен:       new-server         1.2.3.4
+~ без изменений:  autode-master      116.203.102.213
+- удалён:         old-server         5.6.7.8
+Итого: 18 записей
+
+~/.ssh/config:
+~ обновлён batman-блок: 18 хостов
 ```
