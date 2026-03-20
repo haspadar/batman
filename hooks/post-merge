@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# post-merge: auto-install new batman-* skills after git pull
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+SKILLS_SRC="$REPO_ROOT/.claude/skills"
+SKILLS_DST="$HOME/.claude/skills"
+
+mkdir -p "$SKILLS_DST"
+
+for skill_dir in "$SKILLS_SRC"/batman-*/; do
+    [ -d "$skill_dir" ] || continue
+    skill_name=$(basename "$skill_dir")
+    target="$SKILLS_DST/$skill_name"
+    if [ -L "$target" ]; then
+        echo "~ уже установлен: $skill_name"
+    elif [ -d "$target" ]; then
+        echo "✗ конфликт (папка существует): $skill_name"
+    else
+        ln -s "$skill_dir" "$target"
+        echo "✓ установлен: $skill_name"
+    fi
+done
