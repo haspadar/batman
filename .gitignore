@@ -1,3 +1,7 @@
 .bw_password
 .ssh_user
 actual.txt
+
+# Исключения из глобального gitignore
+!CLAUDE.md
+!.claude/
