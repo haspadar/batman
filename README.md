@@ -60,20 +60,6 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 ### `/batman-install`
 Раскладывает снаряжение по местам: симлинки в `~/.claude/skills/`, post-merge хук для автообновления.
 
-## Глобальные скилы
-
-Доступны в любом проекте, устанавливаются вместе с batman:
-
-### `/bw-secret`
-
-Управление секретами в Bitwarden (Secure Note). Namespace определяется по имени проекта из `git remote`.
-
-```
-/bw-secret get <key>           # прочитать секрет
-/bw-secret set <key> <value>   # создать или обновить
-/bw-secret delete <key>        # удалить
-```
-
 ## Скрипты
 
 | Скрипт | Что делает |
