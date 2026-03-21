@@ -85,6 +85,7 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 |--------|------------|
 | `scripts/check-ssh.py` | Root SSH по паролю. Stdin: `пароль hostname ip` |
 | `scripts/check-user.py` | Пользователь, sudo, ключ. Stdin: `пароль hostname ip` |
+| `scripts/check-guest.py` | Гостевой пользователь. Stdin: `пароль hostname ip` |
 | `scripts/check-key.py` | Вход по ключу. Stdin: `hostname ip` |
 | `scripts/sync-bitwarden.py` | Синк `actual.txt` → Bitwarden. Есть `--dry-run` |
 

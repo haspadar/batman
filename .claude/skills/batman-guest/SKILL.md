@@ -7,6 +7,16 @@
 логин пароль
 ```
 
+Перед началом проверь наличие файла:
+```bash
+cat /Users/haspadar/Projects/batman/.ssh_guest
+```
+Если файл отсутствует или пуст — выведи:
+```
+✗ .ssh_guest не найден. Создай файл: echo "логин пароль" > .ssh_guest
+```
+И останови выполнение.
+
 ## Определение сценария
 
 ### Сценарий А — Конкретный сервер
@@ -53,5 +63,6 @@ echo "<login>:<password>" | chpasswd
 ## Технические детали
 
 - Конфиг гостя: `/Users/haspadar/Projects/batman/.ssh_guest`
+- Скрипт проверки: `/Users/haspadar/Projects/batman/scripts/check-guest.py`
 - BW разблокировка: `bw unlock --passwordfile /Users/haspadar/Projects/batman/.bw_password --raw`
 - Коллекция: `a879e149-9510-4fbe-9644-b41300e6a521`
