@@ -6,9 +6,7 @@
 проверяет каждый сервер: существует ли юзер.
 
 Использование:
-  python3 check-guest.py servers.txt
   echo "root_password hostname ip" | python3 check-guest.py
-  cat servers.txt | python3 check-guest.py
 
 Формат servers.txt: root_пароль hostname ip
 Формат .ssh_guest:  логин пароль
@@ -73,11 +71,7 @@ def main():
         print(f"Ошибка чтения .ssh_guest: {e}", file=sys.stderr)
         sys.exit(1)
 
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            text = f.read()
-    else:
-        text = sys.stdin.read()
+    text = sys.stdin.read()
 
     servers = parse_servers(text)
     if not servers:
