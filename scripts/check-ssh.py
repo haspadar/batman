@@ -3,9 +3,7 @@
 Проверка SSH-доступа к серверам.
 
 Использование:
-  python3 check-ssh.py servers.txt
   echo "password hostname ip" | python3 check-ssh.py
-  cat servers.txt | python3 check-ssh.py
 
 Формат строки: пароль hostname ip
 """
@@ -50,11 +48,7 @@ def check_ssh(hostname, ip, password):
 
 
 def main():
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            text = f.read()
-    else:
-        text = sys.stdin.read()
+    text = sys.stdin.read()
 
     servers = parse_servers(text)
     if not servers:

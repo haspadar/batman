@@ -6,9 +6,7 @@
 проверяет каждый сервер: существует ли юзер, есть ли sudo, прописан ли ключ.
 
 Использование:
-  python3 check-user.py servers.txt
   echo "root_password hostname ip" | python3 check-user.py
-  cat servers.txt | python3 check-user.py
 
 Формат servers.txt: root_пароль hostname ip
 Формат .ssh_user:   логин пароль /path/to/key.pub
@@ -91,11 +89,7 @@ def main():
         print(f"Ошибка чтения .ssh_user: {e}", file=sys.stderr)
         sys.exit(1)
 
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            text = f.read()
-    else:
-        text = sys.stdin.read()
+    text = sys.stdin.read()
 
     servers = parse_servers(text)
     if not servers:

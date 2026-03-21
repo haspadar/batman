@@ -3,9 +3,7 @@
 Проверка SSH-входа по ключу для пользователя из .ssh_user.
 
 Использование:
-  python3 check-key.py servers.txt
   echo "hostname ip" | python3 check-key.py
-  cat servers.txt | python3 check-key.py
 
 Формат входных данных: hostname ip  (root_password не нужен, можно передать 3 поля — третье игнорируется)
 Формат .ssh_user: логин пароль /path/to/key.pub
@@ -69,11 +67,7 @@ def main():
         print(f"Ошибка чтения .ssh_user: {e}", file=sys.stderr)
         sys.exit(1)
 
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            text = f.read()
-    else:
-        text = sys.stdin.read()
+    text = sys.stdin.read()
 
     servers = parse_servers(text)
     if not servers:
