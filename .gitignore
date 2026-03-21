@@ -1,5 +1,6 @@
 .bw_password
 .ssh_user
+.ssh_guest
 actual.txt
 
 # Исключения из глобального gitignore
