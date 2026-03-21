@@ -21,7 +21,9 @@
       "Bash(git:*)",
       "Bash(sshpass:*)",
       "Bash(ssh:*)",
-      "Bash(ssh-keygen:*)"
+      "Bash(ssh-keygen:*)",
+      "WebFetch(domain:docs.amnezia.org)",
+      "WebFetch(domain:deepwiki.com)"
     ]
   }
 }

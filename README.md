@@ -69,13 +69,6 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 /batman-kick guest dumin   # удалить на конкретном сервере
 ```
 
-### `/batman-amnesia`
-Выводит все серверы с реквизитами в цвете: hostname, IP, логин, пароль root.
-
-```
-/batman-amnesia
-```
-
 ### `/batman-secret`
 Управление секретами в Bitwarden (Secure Note). Namespace определяется по имени проекта из `git remote`.
 
@@ -93,7 +86,6 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 | `scripts/server.py` | Реквизиты конкретного сервера по hostname. Stdout: `export SSH_*` или `--json` |
 | `scripts/setup-user.py` | Создать/настроить SSH-юзера (sudo + ключ). Stdin: `пароль hostname ip` |
 | `scripts/delete-user.py` | Удалить пользователя. Аргумент: логин. Stdin: `пароль hostname ip` |
-| `scripts/amnesia.py` | Все серверы с реквизитами в цвете |
 | `scripts/check-ssh.py` | Root SSH по паролю. Stdin: `пароль hostname ip` |
 | `scripts/check-user.py` | Пользователь, sudo, ключ. Stdin: `пароль hostname ip` |
 | `scripts/check-key.py` | Вход по ключу. Stdin: `hostname ip` |
