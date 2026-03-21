@@ -31,23 +31,15 @@ cat /Users/haspadar/Projects/batman/.ssh_guest
 
 ## Алгоритм настройки на каждом сервере
 
-Реквизиты root берутся из Bitwarden:
-```
-bw unlock --passwordfile /Users/haspadar/Projects/batman/.bw_password --raw
-bw list items --collectionid a879e149-9510-4fbe-9644-b41300e6a521
-```
-
-Для каждого сервера выполнить через SSH от root:
-
-1. **Создать юзера** (если не существует):
+### Все серверы
 ```bash
-useradd -m -s /bin/bash <login>
-echo "<login>:<password>" | chpasswd
+python3 /Users/haspadar/Projects/batman/scripts/list-servers.py | python3 /Users/haspadar/Projects/batman/scripts/setup-guest.py
 ```
 
-2. **Если уже существует** — только обновить пароль:
+### Конкретные серверы
+Передай только нужные строки в `setup-guest.py` (формат: `root_password hostname ip`):
 ```bash
-echo "<login>:<password>" | chpasswd
+echo "root_pass hostname ip" | python3 /Users/haspadar/Projects/batman/scripts/setup-guest.py
 ```
 
 ## Вывод

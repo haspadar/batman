@@ -24,39 +24,21 @@
 
 ## Алгоритм настройки на каждом сервере
 
-Реквизиты root берутся из Bitwarden — коллекция Hetzner:
-```
-bw unlock --passwordfile /Users/haspadar/Projects/batman/.bw_password --raw
-bw list items --collectionid a879e149-9510-4fbe-9644-b41300e6a521
-```
-
-Для каждого сервера выполнить через SSH от root:
-
-1. **Создать юзера** (если MISSING):
+### Все серверы
 ```bash
-useradd -m -s /bin/bash <login>
-echo "<login>:<password>" | chpasswd
+python3 /Users/haspadar/Projects/batman/scripts/list-servers.py | python3 /Users/haspadar/Projects/batman/scripts/setup-user.py
 ```
 
-2. **Добавить в sudo**:
+### Конкретные серверы
 ```bash
-usermod -aG sudo <login>
-echo "<login> ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/<login>
+echo "root_pass hostname ip" | python3 /Users/haspadar/Projects/batman/scripts/setup-user.py
 ```
 
-3. **Прописать SSH-ключ**:
-```bash
-mkdir -p /home/<login>/.ssh
-echo "<pub_key>" >> /home/<login>/.ssh/authorized_keys
-chmod 700 /home/<login>/.ssh
-chmod 600 /home/<login>/.ssh/authorized_keys
-chown -R <login>:<login> /home/<login>/.ssh
-```
-
-4. **Проверить** — подключиться под новым юзером:
-```
-ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i <private_key> <login>@<ip> echo OK
-```
+Скрипт выполняет на каждом сервере:
+1. Создаёт юзера (если не существует)
+2. Добавляет в sudo + sudoers.d
+3. Прописывает SSH-ключ в authorized_keys
+4. Проверяет подключение по ключу
 
 ## Вывод
 
