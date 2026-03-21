@@ -62,23 +62,32 @@ def setup_user(hostname, ip, root_password, login, password, pub_key_path):
         if 'CREATED' not in out and 'EXISTS' not in out:
             return ('ERROR', out or 'useradd failed')
 
+        # Убедиться что /home доступен для traverse (иначе sshd не прочитает authorized_keys)
+        ssh_run(ip, root_password, "chmod 755 /home")
+
         # Добавить в sudo
         ssh_run(ip, root_password,
             f"bash -c \"usermod -aG sudo '{login}' 2>/dev/null || usermod -aG wheel '{login}'; "
             f"echo '{login} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/{login}; "
             f"chmod 440 /etc/sudoers.d/{login}\"")
 
-        # Прописать SSH-ключ
-        escaped_key = pub_key.replace('"', '\\"')
-        ssh_run(ip, root_password,
-            f"bash -c \""
-            f"mkdir -p /home/{login}/.ssh && "
-            f"chmod 700 /home/{login}/.ssh && "
-            f"grep -qF \\\"{escaped_key}\\\" /home/{login}/.ssh/authorized_keys 2>/dev/null || "
-            f"echo \\\"{escaped_key}\\\" >> /home/{login}/.ssh/authorized_keys && "
-            f"chmod 600 /home/{login}/.ssh/authorized_keys && "
-            f"chown -R {login}:{login} /home/{login}/.ssh"
-            f"\"")
+        # Прописать SSH-ключ через stdin — без экранирования
+        subprocess.run(
+            ['sshpass', '-p', root_password, 'ssh',
+             '-o', 'ConnectTimeout=10',
+             '-o', 'BatchMode=no',
+             '-o', 'StrictHostKeyChecking=no',
+             '-o', 'PasswordAuthentication=yes',
+             f'root@{ip}',
+             f"bash -c 'mkdir -p /home/{login}/.ssh && "
+             f"chmod 700 /home/{login}/.ssh && "
+             f"cat >> /home/{login}/.ssh/authorized_keys && "
+             f"sort -u /home/{login}/.ssh/authorized_keys -o /home/{login}/.ssh/authorized_keys && "
+             f"chmod 600 /home/{login}/.ssh/authorized_keys && "
+             f"chown -R {login}:{login} /home/{login}/.ssh'"],
+            input=pub_key + '\n',
+            capture_output=True, text=True, timeout=20
+        )
 
         # Проверить подключение по ключу
         private_key = pub_key_path.removesuffix('.pub')
