@@ -4,10 +4,8 @@
 
 Конфиг пользователя берётся из `/Users/haspadar/Projects/batman/.ssh_user`:
 ```
-логин пароль /path/to/key.pub [nosudo]
+логин пароль /path/to/key.pub
 ```
-
-4-е поле опциональное. Если указано `nosudo` — пользователь создаётся без sudo. По умолчанию (поле отсутствует) — sudo выдаётся.
 
 ## Определение сценария
 
@@ -40,7 +38,7 @@ useradd -m -s /bin/bash <login>
 echo "<login>:<password>" | chpasswd
 ```
 
-2. **Добавить в sudo** (если 4-е поле `.ssh_user` не равно `nosudo`):
+2. **Добавить в sudo**:
 ```bash
 usermod -aG sudo <login>
 echo "<login> ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/<login>
