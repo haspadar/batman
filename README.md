@@ -70,24 +70,45 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 /batman-guest               # все серверы
 ```
 
-### `/bw-secret`
+### `/batman-secret`
 Управление секретами в Bitwarden (Secure Note). Namespace определяется по имени проекта из `git remote`.
 
 ```
-/bw-secret get <key>           # прочитать секрет
-/bw-secret set <key> <value>   # создать или обновить
-/bw-secret delete <key>        # удалить
+/batman-secret get <key>           # прочитать секрет
+/batman-secret set <key> <value>   # создать или обновить
+/batman-secret delete <key>        # удалить
 ```
 
 ## Скрипты
 
 | Скрипт | Что делает |
 |--------|------------|
+| `scripts/list-servers.py` | Список серверов из Bitwarden. В терминале — с цветами и паролями, в pipe — `пароль hostname ip` |
+| `scripts/server.py` | Реквизиты конкретного сервера по hostname. Stdout: `export SSH_*` или `--json` |
+| `scripts/setup-guest.py` | Создать/обновить гостевого юзера. Stdin: `пароль hostname ip` |
+| `scripts/setup-user.py` | Создать/настроить SSH-юзера (sudo + ключ). Stdin: `пароль hostname ip` |
 | `scripts/check-ssh.py` | Root SSH по паролю. Stdin: `пароль hostname ip` |
 | `scripts/check-user.py` | Пользователь, sudo, ключ. Stdin: `пароль hostname ip` |
 | `scripts/check-guest.py` | Гостевой пользователь. Stdin: `пароль hostname ip` |
 | `scripts/check-key.py` | Вход по ключу. Stdin: `hostname ip` |
 | `scripts/sync-bitwarden.py` | Синк `actual.txt` → Bitwarden. Есть `--dry-run` |
+
+### Примеры
+
+```bash
+# Список всех серверов
+python3 scripts/list-servers.py
+
+# Реквизиты конкретного сервера
+eval $(python3 scripts/server.py danon)
+ssh -i $SSH_KEY $SSH_USER@$SSH_HOST
+
+# Создать гостевого юзера на всех серверах
+python3 scripts/list-servers.py | python3 scripts/setup-guest.py
+
+# Настроить SSH-юзера на конкретном сервере
+echo "root_pass hostname ip" | python3 scripts/setup-user.py
+```
 
 ## Зависимости
 
