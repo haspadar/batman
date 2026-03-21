@@ -21,9 +21,8 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 |------|--------|------------|
 | `.bw_password` | строка | Пароль для разблокировки Bitwarden CLI |
 | `.ssh_user` | `логин пароль /path/to/key.pub` | Акробат, его пароль и пропуск за кулисы |
-| `.ssh_guest` | `логин пароль` | Гостевой пользователь без ключей и sudo |
 
-Оба файла в `.gitignore`. Если ключ не существует — создастся автоматически при первом `/batman-doctor`.
+Файлы в `.gitignore`. Если ключ не существует — создастся автоматически при первом `/batman-doctor`.
 
 ## Скилы
 
@@ -62,14 +61,6 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 /batman-user               # спросит сам
 ```
 
-### `/batman-guest`
-Создаёт гостевого пользователя на серверах — только с паролем, без SSH-ключей и без sudo. Если пользователь уже существует — обновляет пароль.
-
-```
-/batman-guest dumin         # конкретный сервер
-/batman-guest               # все серверы
-```
-
 ### `/batman-secret`
 Управление секретами в Bitwarden (Secure Note). Namespace определяется по имени проекта из `git remote`.
 
@@ -85,11 +76,9 @@ echo "логин пароль /path/to/key.pub" > .ssh_user
 |--------|------------|
 | `scripts/list-servers.py` | Список серверов из Bitwarden. В терминале — с цветами и паролями, в pipe — `пароль hostname ip` |
 | `scripts/server.py` | Реквизиты конкретного сервера по hostname. Stdout: `export SSH_*` или `--json` |
-| `scripts/setup-guest.py` | Создать/обновить гостевого юзера. Stdin: `пароль hostname ip` |
 | `scripts/setup-user.py` | Создать/настроить SSH-юзера (sudo + ключ). Stdin: `пароль hostname ip` |
 | `scripts/check-ssh.py` | Root SSH по паролю. Stdin: `пароль hostname ip` |
 | `scripts/check-user.py` | Пользователь, sudo, ключ. Stdin: `пароль hostname ip` |
-| `scripts/check-guest.py` | Гостевой пользователь. Stdin: `пароль hostname ip` |
 | `scripts/check-key.py` | Вход по ключу. Stdin: `hostname ip` |
 | `scripts/sync-bitwarden.py` | Синк `actual.txt` → Bitwarden. Есть `--dry-run` |
 
@@ -102,9 +91,6 @@ python3 scripts/list-servers.py
 # Реквизиты конкретного сервера
 eval $(python3 scripts/server.py danon)
 ssh -i $SSH_KEY $SSH_USER@$SSH_HOST
-
-# Создать гостевого юзера на всех серверах
-python3 scripts/list-servers.py | python3 scripts/setup-guest.py
 
 # Настроить SSH-юзера на конкретном сервере
 echo "root_pass hostname ip" | python3 scripts/setup-user.py

@@ -2,6 +2,7 @@
 .ssh_user
 .ssh_guest
 actual.txt
+.idea/
 
 # Исключения из глобального gitignore
 !CLAUDE.md
